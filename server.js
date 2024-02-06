@@ -2,16 +2,9 @@ const express = require("express");
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 
-const db = mysql.createConnection(
-  {
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "company",
-  },
 
-  console.log("Connected to the company database")
-);
+
+  console.log("Connected to the company database");
 
 function initialPrompt() {
   inquirer
@@ -103,60 +96,62 @@ function viewAllEmployees() {
                   AS manager FROM employees
 LEFT JOIN departments ON roles.department_id=department.id
 LEFT JOIN roles ON employees.role_id=roles.id
-LEFT JOIN employees manager ON manager.id=employees.manager_id`
-  db.query(query, function(err, results) {
-    if(err) throw err;
-    console.table(results);
-    initialPrompt();
-});
-}
-
-function addEmployee() {
-  inquirer.prompt([
-    {
-      name: 'firstname',
-      type: 'input',
-      message: 'What is the employees first name'
-     },
-     {
-      name: 'lastname',
-      type: 'input',
-      message: 'What is the employees last name'
-     },
-     {
-      name: 'role',
-      type: 'input',
-      message: 'What is the employees role id? ( 1-Associate, 2-Software Engineer, 3-Salesperson, 5-Accountant, 4-Lawyer,  6-Associate Manager, 7-Software Engineering Manager, 8-Sales Manager, 9-Accounting Manager, 10-Compliance Manager )'
-     },
-     {
-      name: 'manager',
-      type: 'input',
-      message: 'What is the employees manager id? (1-Cassie Jenkins(Associate Manager), 2-Robert Johnson(Software Engineering Manager), 3-Lexis Honda(Sales Manager), 4-Ashley Botega(Accounting Manager), 5-Emilio Estevez(Compliance Manager)',
-},
-
-])
-
-.then(data => {
-  const query = `INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
-  VALUES (DEFAULT, "${data.firstname}", "${data.lastname}", ${Number(data.manager)})`
+LEFT JOIN employees manager ON manager.id=employees.manager_id`;
   db.query(query, function (err, results) {
-    if(err)throw err;
+    if (err) throw err;
     console.table(results);
     initialPrompt();
   });
-})
+}
+
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        name: "firstname",
+        type: "input",
+        message: "What is the employees first name",
+      },
+      {
+        name: "lastname",
+        type: "input",
+        message: "What is the employees last name",
+      },
+      {
+        name: "role",
+        type: "input",
+        message:
+          "What is the employees role id? ( 1-Associate, 2-Software Engineer, 3-Salesperson, 5-Accountant, 4-Lawyer,  6-Associate Manager, 7-Software Engineering Manager, 8-Sales Manager, 9-Accounting Manager, 10-Compliance Manager )",
+      },
+      {
+        name: "manager",
+        type: "input",
+        message:
+          "What is the employees manager id? (1-Cassie Jenkins(Associate Manager), 2-Robert Johnson(Software Engineering Manager), 3-Lexis Honda(Sales Manager), 4-Ashley Botega(Accounting Manager), 5-Emilio Estevez(Compliance Manager)",
+      },
+    ])
+
+    .then((data) => {
+      const query = `INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
+   VALUES (DEFAULT, "${data.firstname}", "${data.lastname}", ${Number(data.role)}, ${Number(data.manager)})`;
+      db.query(query, function (err, results) {
+        if (err) throw err;
+        console.table(results);
+        initialPrompt();
+      });
+    });
 }
 
 function addDepartment() {
   inquirer
     .prompt([
       {
-        name: 'departmentName',
-        type: 'input',
-        message: 'Department name?'
-      }
+        name: "departmentName",
+        type: "input",
+        message: "Department name?",
+      },
     ])
-    .then(data => {
+    .then((data) => {
       const query = `INSERT INTO departments (id, name)
                      VALUES (DEFAULT, "${data.departmentName}")`;
       db.query(query, function (err, results) {
@@ -166,32 +161,34 @@ function addDepartment() {
       });
     });
 }
- function addRole() {
-  inquirer.prompt([
-    {
-      name: 'roleName',
-      type: 'input',
-      message: 'role name?'
-    },
-    {
-      name: 'roleSalary',
-      type: 'input',
-      message: 'role salary?'
-    },
-    {
-      name: 'roleDeptId',
-      type: 'input',
-      message: 'department id? (1-Associate, 2-Engineering, 3-Sales, 4-Financing, 5-Legal)'
-    },
-  ])
-  .then(data => {
-  const query = `INSERT INTO roles (id, title, salary, department_id)
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        name: "roleName",
+        type: "input",
+        message: "role name?",
+      },
+      {
+        name: "roleSalary",
+        type: "input",
+        message: "role salary?",
+      },
+      {
+        name: "roleDeptId",
+        type: "input",
+        message:
+          "department id? (1-Associate, 2-Engineering, 3-Sales, 4-Financing, 5-Legal)",
+      },
+    ])
+    .then((data) => {
+      const query = `INSERT INTO roles (id, title, salary, department_id)
       VALUES (DEFAULT, "${data.roleName}", "${data.roleSalary}", "${data.roleDeptId}")`;
-  db.query(query, function (err, results) {
-    if (err) throw err;
-    console.table(results);
-    initialPrompt();
-  })
-})
- }
- initialPrompt();
+      db.query(query, function (err, results) {
+        if (err) throw err;
+        console.table(results);
+        initialPrompt();
+      });
+    });
+}
+initialPrompt();
