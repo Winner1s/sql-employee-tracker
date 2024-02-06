@@ -69,10 +69,11 @@ function initialPrompt() {
       }
     });
 }
-
 function viewAllDepartments() {
   db.query("SELECT * FROM departments", function (err, results) {
-    if (err) throw err;
+    if (err) {
+      throw err;
+    }
     console.table(results);
     initialPrompt();
   });
