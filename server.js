@@ -151,7 +151,7 @@ function addEmployee() {
       const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
    VALUES ("${data.firstname}", "${data.lastname}", ${Number(
         data.role
-      )}, ${Number(data.manager)})`;
+      )}, ${manager_id})`;
       db.query(query, function (err, results) {
         if (err) throw err;
         console.table(results);
