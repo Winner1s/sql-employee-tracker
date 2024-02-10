@@ -2,9 +2,22 @@ const express = require("express");
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "company",
+});
 
+db.connect((err) => {
+  if (err) {
+    console.error("Error connecting to the database:", err);
+    return;
+  }
+  console.log("Connected to the database!");
+});
 
-  console.log("Connected to the company database");
+console.log("Connected to the company database");
 
 function initialPrompt() {
   inquirer
@@ -93,10 +106,10 @@ function viewAllEmployees() {
     roles.title,
     departments.name,
     roles.salary,
-          concat(manager.first_name, "", manager.last_name)
+          concat(manager.first_name, " ", manager.last_name)
                   AS manager FROM employees
-LEFT JOIN departments ON roles.department_id=department.id
-LEFT JOIN roles ON employees.role_id=roles.id
+                  LEFT JOIN roles ON employees.role_id=roles.id
+                  LEFT JOIN departments ON roles.department_id=departments.id
 LEFT JOIN employees manager ON manager.id=employees.manager_id`;
   db.query(query, function (err, results) {
     if (err) throw err;
@@ -106,6 +119,7 @@ LEFT JOIN employees manager ON manager.id=employees.manager_id`;
 }
 
 function addEmployee() {
+  const rolesList = ["1", "2", "3", "4", "5"]
   inquirer
     .prompt([
       {
@@ -120,9 +134,10 @@ function addEmployee() {
       },
       {
         name: "role",
-        type: "input",
-        message:
-          "What is the employees role id? ( 1-Associate, 2-Software Engineer, 3-Salesperson, 5-Accountant, 4-Lawyer,  6-Associate Manager, 7-Software Engineering Manager, 8-Sales Manager, 9-Accounting Manager, 10-Compliance Manager )",
+        type: "list",
+        message: "what is the employees role id?",
+        choices: rolesList
+
       },
       {
         name: "manager",
@@ -133,8 +148,10 @@ function addEmployee() {
     ])
 
     .then((data) => {
-      const query = `INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
-   VALUES (DEFAULT, "${data.firstname}", "${data.lastname}", ${Number(data.role)}, ${Number(data.manager)})`;
+      const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+   VALUES ("${data.firstname}", "${data.lastname}", ${Number(
+        data.role
+      )}, ${Number(data.manager)})`;
       db.query(query, function (err, results) {
         if (err) throw err;
         console.table(results);
@@ -183,8 +200,8 @@ function addRole() {
       },
     ])
     .then((data) => {
-      const query = `INSERT INTO roles (id, title, salary, department_id)
-      VALUES (DEFAULT, "${data.roleName}", "${data.roleSalary}", "${data.roleDeptId}")`;
+      const query = `INSERT INTO roles (title, salary, department_id)
+      VALUES ("${data.roleName}", "${data.roleSalary}", "${data.roleDeptId}")`;
       db.query(query, function (err, results) {
         if (err) throw err;
         console.table(results);

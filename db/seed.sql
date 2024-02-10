@@ -7,7 +7,7 @@ VALUES ('Associate', 50000, 1),
        ('Accountant', 125000, 4),
        ('Lawyer', 200000, 5);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
+INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES ('Stefany', 'Jackson', 5, 4),
        ('Anna', 'Koch', 5, 3),
        ('Michael', 'Jackson', 5, 2),
