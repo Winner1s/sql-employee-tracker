@@ -123,24 +123,24 @@ function addEmployee() {
   inquirer
     .prompt([
       {
-        name: "firstname",
+        name: "first_name",
         type: "input",
         message: "What is the employees first name",
       },
       {
-        name: "lastname",
+        name: "last_name",
         type: "input",
         message: "What is the employees last name",
       },
       {
-        name: "role",
+        name: "role_id",
         type: "list",
         message: "what is the employees role id?",
         choices: rolesList
 
       },
       {
-        name: "manager",
+        name: "manager_id",
         type: "input",
         message:
           "What is the employees manager id? (1-Cassie Jenkins(Associate Manager), 2-Robert Johnson(Software Engineering Manager), 3-Lexis Honda(Sales Manager), 4-Ashley Botega(Accounting Manager), 5-Emilio Estevez(Compliance Manager)",
@@ -149,10 +149,9 @@ function addEmployee() {
 
     .then((data) => {
       const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
-   VALUES ("${data.firstname}", "${data.lastname}", ${Number(
-        data.role
-      )}, ${manager_id})`;
-      db.query(query, function (err, results) {
+   VALUES (?, ?, ?, ?);`
+      db.query(query, [data.first_name, data.last_name, data.role_id, data.manager_id],
+        function (err, results) {
         if (err) throw err;
         console.table(results);
         initialPrompt();
