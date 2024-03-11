@@ -119,7 +119,7 @@ LEFT JOIN employees manager ON manager.id=employees.manager_id`;
 }
 
 function addEmployee() {
-  const rolesList = ["1", "2", "3", "4", "5"]
+  const rolesList = ["1", "2", "3", "4", "5"];
   inquirer
     .prompt([
       {
@@ -136,8 +136,7 @@ function addEmployee() {
         name: "role_id",
         type: "list",
         message: "what is the employees role id?",
-        choices: rolesList
-
+        choices: rolesList,
       },
       {
         name: "manager_id",
@@ -149,13 +148,16 @@ function addEmployee() {
 
     .then((data) => {
       const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
-   VALUES (?, ?, ?, ?);`
-      db.query(query, [data.first_name, data.last_name, data.role_id, data.manager_id],
+   VALUES (?, ?, ?, ?);`;
+      db.query(
+        query,
+        [data.first_name, data.last_name, data.role_id, data.manager_id],
         function (err, results) {
-        if (err) throw err;
-        console.table(results);
-        initialPrompt();
-      });
+          if (err) throw err;
+          console.table(results);
+          initialPrompt();
+        }
+      );
     });
 }
 
