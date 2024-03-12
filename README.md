@@ -1,6 +1,6 @@
 # SQL Employee Tracker
 
-![Getting Started](./asset/images/screenshot.png)
+![Getting Started](./asset/screenshot.png)
 
 ## Deployed program
 
