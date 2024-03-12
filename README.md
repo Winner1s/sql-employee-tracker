@@ -5,7 +5,7 @@
 ## Deployed program
 
 1. Github - [https://github.com/Winner1s/sql-employee-tracker](https://github.com/Winner1s/sql-employee-tracker)
-2. Walkthrough video - [https://winner1s.github.io/code-quiz/](https://winner1s.github.io/code-quiz/)  
+2. Walkthrough video - [https://www.youtube.com/watch?v=blV5cZbEe-k](https://www.youtube.com/watch?v=blV5cZbEe-k)  
 
 ## User Story
 
